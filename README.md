@@ -6,4 +6,6 @@
 
 # 第三方库
 pip install requests
+
+
 pip install muggle_ocr -i https://mirrors.aliyun.com/pypi/simple/
