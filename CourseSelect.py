@@ -77,7 +77,7 @@ def PublicWriteToFile(name, courses):
     with open(f"{name}.csv", 'w', encoding='utf-8-sig', newline='') as datacsv:
         csvwriter = csv.writer(datacsv)
         csvwriter.writerow(
-            ('课程编号', '课程名', '教师姓名', '上课地点', 'jx0404id', '时间冲突', '类别'))
+            ('课程编号', '课程名', '教师姓名', '上课地点', 'jx0404id', '时间冲突', '类别', '剩余量', '上课时间'))
         for course in courses:
             csvwriter.writerow(
                 (course[:-1]))
@@ -105,7 +105,7 @@ def SelectCourse(course_list_url, course_check_url, data, inquiry_params):
     courses_dict = loads(req.text)
     for i in courses_dict['aaData']:
         courses.append((i['kch'], i['kcmc'], i['skls'], i['kkapList'][0]
-                       ['jsmc'], i['jx0404id'], i['ctsm'], i['kcxzmc'], i['jx02id']))
+                       ['jsmc'], i['jx0404id'], i['ctsm'], i['kcxzmc'],  i['syrs'], i['sksj'], i['jx02id']))
     write = Thread(
         target=PublicWriteToFile, args=('公选列表', courses))
     write.start()
@@ -113,11 +113,11 @@ def SelectCourse(course_list_url, course_check_url, data, inquiry_params):
     print("生成成功！")
     jx0404id = ''
     while jx0404id != '0':
-        time.sleep(1)
+        time.sleep(1.5)
         jx0404id = input("请输入jx0404id：(输入0退出选课)：")
         for course in courses:
             if jx0404id == course[4]:
-                for i in range(3):
+                for i in range(5):
                     th = Thread(target=DoSelect , args = (course_check_url, course))
                     th.start()
                 break
